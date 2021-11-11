@@ -10,7 +10,7 @@ hello i'm noise
 i'm also noise
 www.abcd.com
 
-Output: www\.abc.{1,5}\.com
+Output: www\\.abc.{1,5}\\.com
 
 Sample input:
 www.abcdefgh.com
@@ -19,5 +19,5 @@ www.facebook.com
 hello i'm noise
 www.network.com
 
-Output: www\.{6,8}\.com
+Output: www\\.{6,8}\\.com
 
