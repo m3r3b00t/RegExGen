@@ -1,0 +1,81 @@
+Algorithm to generate ReGex for given list of strings.
+
+1. Sort strings lexciographically
+2. Group strings based on edit distance and string length.
+   Omit string which edit distance is almost eq to len(string)
+3. For each group find longest common subsequence.
+   At end split that LCS to possible substrings of last string of group.
+4. Now create Regex based on substrings and (first, last) strings of group.
+
+Result is depends on:
+Threshold edit distance to change group. More threshold value bigger groups.
+Min and Max length of strings.
+
+Example walkthrough:
+List of strings: {www.netskope.com, www.net.com, www.netscalar.com, www.google.com, hello world., www.network.com}
+threshold_distance: 6
+
+After first step:
+{
+ hello world.
+ www.google.com
+ www.netscalar.com
+ www.netskope.com
+ www.network.com
+ www.net.com
+}
+
+After second step:
+{
+ www.netscalar.com
+ www.netskope.com
+ www.network.com
+ www.net.com
+}
+Explanation:
+ "hello world." will be omitted as edit_distance to "www.google.com" is len("www.google.com") > threshold_distance.
+ "www.google.com" will be omitted as edit_distance (to "www.netscalar.com" is 9) > threshold_distance.
+ "www.netscalar.com" will be begin of group as its edit_distance to "www.netskope.com" is 5. We found begin of group.
+ "www.netskope.com" will be part of group as its  edit_distance to last and first string of group "www.netscalar.com" is 5.
+ "www.network.com" will be part of group as its edit_distance to last string in group "www.netskope.com" is 5 and to first string "www.netscalar.com" in group is 6.
+ "www.net.com" will be part of group as its edit_distance to last string in group "www.network.com" is 4 and to first string "www.netscalar.com" in group is 6.
+
+After third step:
+ LCS is "www.net.com", can be splitted to {"www.net", ".com"}
+Process to split to substrs:
+ Find first substr between first_string_of_group and LCS and repeat this by passing rest of strings.
+ firstSubStr("www.netscalar.com", "www.net.com")should return ["www.net", 0, 7] #[substr, start_index, len]
+   store ""www.net" as {"www.net"}
+ firstSubStr("scalar.com", ".com")should return [".com", 6, 4] #[substr, start_index, len]
+   store ".com" as {"www.net", ".com"}
+ Now ".com"+len(i.e 4) become "" so we will stop finding substrs.
+ 
+After fourth step:
+ www\.net.{0,6}\.com
+
+Process:
+ In each substring for special charactres like '.' prepend escape sequence '\' and join substring by substring with ranges.
+ Min_chars is Min distance between current two substrs
+ Max_chars is Max distance between current two substrs
+ Min_chars = 9999 Max_chars = 0
+ For every string in group find distance 'd' between two substsrs ("www.net", ".com") 
+ Min_chars = Min(Min_chars, d)
+ Max_chars = Max(Max_chars, d)
+ Min we get from "www.net.com" as 0.
+ Max we get from "www.netscalar.com" as 6.
+ www\.net.{Min_chars, Max_chars}\.com
+ 
+Little realistic example:
+After second step
+{
+ www.netfdsayouskope.com
+ www.netheyou.com
+ www.netreyouwork.com
+ www.netscalaryou.com
+}
+After third step
+ ["www.net", "you", ".com"]
+After fourth step
+ www\.net.{2,6}.you.{0,5}.\.com
+
+
