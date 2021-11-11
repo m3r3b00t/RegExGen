@@ -66,6 +66,19 @@ Process:
  www\.net.{Min_chars, Max_chars}\.com
  
 Little realistic example:
+{
+ www.abcdefghijklmn.com
+ www.netfdsayouskope.com
+ www.xyz.com
+ www.netheyou.com
+ i'm noise
+ www.google.com
+ www.netreyouwork.com
+ www.netscalaryou.com
+ www.qwertyuiops1223.com
+}
+#threshold: 9
+
 After second step
 {
  www.netfdsayouskope.com
@@ -78,4 +91,4 @@ After third step
 After fourth step
  www\.net.{2,6}.you.{0,5}.\.com
 
-
+We can enhance algorithm to generate ReGexs for every group.
