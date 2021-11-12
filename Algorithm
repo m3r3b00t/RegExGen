@@ -1,10 +1,16 @@
 Algorithm to generate ReGex for given list of strings.
 
-1. Sort strings lexciographically
+1. Sort strings lexciographically.
+1.1 While scanning string store all unique chars from all strings. Useful in 3.1 and 4.
 2. Group strings based on edit distance and string length.
    Omit string which edit distance is almost eq to len(string)
 3. For each group find longest common subsequence.
    At end split that LCS to possible substrings of last string of group.
+   Go to step 4.
+3.1 If LCS is None then we need to cover all strings in input.
+    Create unique_char_groups from unique_chars (created in 1.1) and find range.
+    [unique_char_groups].{Range}
+    Range will be {len(smallest_str_in_input), len(longest_str_in_input)}
 4. Now create Regex based on substrings and (first, last) strings of group.
 
 Result is depends on:
@@ -92,3 +98,48 @@ After fourth step
  www\.net.{2,6}.you.{0,5}.\.com
 
 We can enhance algorithm to generate ReGexs for every group.
+
+Case where LCS is None:
+Consider input as {1000, 10000, 9999, 12345, 1000000, 10000000, 10000001}
+Threshold: 8 (len of longest_str is 8 so we need to consider all inputs, no omission as noise)
+Expected output: [0-5,9].{4,8}
+
+Step 1:
+ {1000, 10000, 1000000, 10000000, 10000001, 12345, 9999}
+ unique_chars = [0,1,2,3,4,5,9]
+ 
+Step 2:
+ No grouping is required as Threshold_edit_distance == len(longest_str).
+ Everything is single group.
+ {1000, 10000, 1000000, 10000000, 10000001, 12345, 9999}
+ 
+Step 3:
+ LCS is ""
+
+Step 3.1:
+ unique_chars = [0,1,2,3,4,5,9] to unique_char_groups = [0-5,9]
+ Range = {len(smallest_str), len(longest_str)} 
+
+output: unique_char_groups.Range ==> [0-5,9].{4,8}
+
+Consider input as {abcd, help, hello, whoami, elliot, mrrobot}
+Threshold: 6
+Expected output: [a-e,h-i, l-m, o-p, t, w].{4,7}
+
+Step 1:
+ {abcd, elliot, hello, help, mrrobot, whoami}
+ unique_chars = [a,b,c,d,e,h,i,l,m,o,p,t,w]
+ 
+Step 2:
+ No grouping is required as Threshold_edit_distance == len(longest_str).
+ Everything is single group.
+ {abcd, elliot, hello, help, mrrobot, whoami}
+ 
+Step 3:
+ LCS is ""
+
+Step 3.1:
+ unique_chars = [a,b,c,d,e,h,i,l,m,o,p,t,w] to unique_char_groups = [a-e,h-i, l-m, o-p, t, w]
+ Range = {len(smallest_str), len(longest_str)} 
+
+output: unique_char_groups.Range ==> [a-e,h-i, l-m, o-p, t, w].{4,7}
