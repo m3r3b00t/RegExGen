@@ -131,7 +131,7 @@ class GenRegEx:
         print("RegEx generated is : %s" %pattern)
         return pattern
 
-my_list = ["www.abcd.com", "www.help.com", "www.hello.net", "www.whoami.com", "www.elliot.com", "www.mrrobot.com"]
+my_list = ["www.abcd.com", "www.help.com", "www.hello.com", "www.whoami.com", "www.elliot.com", "www.mrrobot.com"]
 #my_list = ["1000", "10000", "9999", "12345", "1000000", "10000000", "10000001", "hello"]
 #my_list = ["helo", "hellow", "qorld", "qwerty", "im noise", "im sound", "let's check"]
 #my_list = ["i'm noise", "hello", "unrelted words", "www.ksrtc.co.in"]
